@@ -1,0 +1,45 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "vrdu",
+ "name": "VRDU (registration forms and ad-buy forms)",
+ "homepage": "https://github.com/google-research-datasets/vrdu",
+ "source": "https://github.com/google-research-datasets/vrdu",
+ "description": "1,915 US DOJ registration forms and 641 FCC ad-buy forms (PDFs) with human-annotated field values; text is machine OCR, not ground truth.",
+ "licence": {
+  "name": "none stated (no LICENSE file, no licence in README)",
+  "url": "https://github.com/google-research-datasets/vrdu",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": "unknown",
+ "redistribution": "unknown",
+ "use": "excluded",
+ "use_reason": "no licence stated (O4)",
+ "language": "en",
+ "categories": [
+  "forms"
+ ],
+ "conditions": [
+  "scan"
+ ],
+ "ground_truth": {
+  "text": "machine OCR only (not ground truth)",
+  "boxes": true,
+  "reading_order": false,
+  "tables": false,
+  "key_values": true
+ },
+ "size": "2,556 PDFs",
+ "files": [],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded: licence not stated (the host, github.com, is reachable)",
+ "notes": [
+  "Dropped by orchestrator decision (WO-001 review, 19 Nov 2026)."
+ ]
+}

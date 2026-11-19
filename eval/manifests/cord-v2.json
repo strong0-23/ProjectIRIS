@@ -1,0 +1,46 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "cord-v2",
+ "name": "CORD v2: Consolidated Receipt Dataset",
+ "homepage": "https://github.com/clovaai/cord",
+ "source": "https://huggingface.co/datasets/naver-clova-ix/cord-v2",
+ "description": "Phone photos of Indonesian shop and restaurant receipts with word boxes, text and semantic fields (menu items, prices, totals). Text is mixed Indonesian/English.",
+ "licence": {
+  "name": "CC BY 4.0",
+  "url": "https://github.com/clovaai/cord",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": true,
+ "redistribution": "yes, with attribution (CC BY 4.0); not redistributed here",
+ "use": "allowed",
+ "language": "id/en (mixed)",
+ "categories": [
+  "receipts"
+ ],
+ "conditions": [
+  "phone-photo"
+ ],
+ "ground_truth": {
+  "text": true,
+  "boxes": true,
+  "reading_order": false,
+  "tables": false,
+  "key_values": true
+ },
+ "size": "1,000 receipts public (800 train / 100 validation / 100 test); use the test and validation splits",
+ "files": [],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded here: host not reachable from the sandbox (huggingface.co)",
+ "notes": [
+  "Files (parquet) to be listed and pinned on a machine that reaches huggingface.co; then write the converter.",
+  "Not English-only (O1 is English first): useful for numbers and layout, report separately from English receipts.",
+  "Phone photos, some skewed or crumpled, but conditions are not labelled; count only pages the owner tags as hard."
+ ]
+}

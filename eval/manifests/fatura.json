@@ -1,0 +1,53 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "fatura",
+ "name": "FATURA invoices",
+ "homepage": "https://zenodo.org/records/10371464",
+ "source": "https://zenodo.org/records/10371464",
+ "description": "Synthetic invoice images generated from 50 templates (200 per template), with word boxes, text and 24 field classes.",
+ "licence": {
+  "name": "CC BY 4.0",
+  "url": "https://zenodo.org/records/10371464",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": true,
+ "redistribution": "yes, with attribution; not redistributed here",
+ "use": "allowed",
+ "language": "en",
+ "categories": [
+  "invoices"
+ ],
+ "conditions": [
+  "synthetic"
+ ],
+ "ground_truth": {
+  "text": true,
+  "boxes": true,
+  "reading_order": false,
+  "tables": false,
+  "key_values": true
+ },
+ "size": "20,000 images (10,000 white and 10,000 coloured backgrounds), FATURA2.zip 690.7 MB",
+ "files": [
+  {
+   "url": "https://zenodo.org/records/10371464/files/FATURA2.zip?download=1",
+   "dest": "FATURA2.zip",
+   "bytes": null,
+   "sha256": null,
+   "unpack": "zip"
+  }
+ ],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded here: host not reachable from the sandbox (zenodo.org)",
+ "notes": [
+  "Synthetic: clean renders from 50 templates. Sample across templates; it does not replace real invoices.",
+  "Checksum not yet pinned."
+ ]
+}

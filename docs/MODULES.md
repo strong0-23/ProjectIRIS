@@ -55,3 +55,49 @@ Flag      { reason: low-confidence | readers-disagree | check-failed | cut-off |
 
 Coordinates are in page pixels of the prepared image, with the transform back to the original
 image recorded so callers can draw on the photo the user took.
+
+### Fields the evaluation harness reads (WO-001, provisional)
+
+The harness (`research/eval/iris_eval/docmodel.py`) scores any reader that writes this model, one
+`Document` per page image. It relies on these details, which the model above leaves open:
+
+```
+box       [x0, y0, x1, y1] in page pixels
+Pair      { key, value, field?, box?, confidence, flags }   key/value: string or { text, box }
+          field: optional canonical name (e.g. "total") when the reader knows it
+Word      { text, box, confidence, flags? }                 flags optional; line/block flags apply to its words
+Cell      { row, col, rowSpan, colSpan, text, box?, confidence?, flags? }
+confidence  0..1; missing confidence is treated as confident (cannot hide an error)
+source    { runtime, models: [{ name, version, sizeBytes, licence }],
+            timings: { totalSeconds, <stage>Seconds... }, peakMemoryBytes, confidenceThreshold? }
+```
+
+Text is taken from block `lines` in block `order`; a table block without lines contributes its
+cells row by row, and a key-value block without lines contributes `key value` per pair, so a block
+must not repeat text another block already holds.
+
+## Evaluation harness (research/eval)
+
+Research-only Python package `iris_eval`; never imported by the engine.
+
+```
+eval/manifests/*.json --download.py--> eval/.data/raw/<dataset>/
+     --prepare (converter + split rule, checked against eval/splits/)--> eval/.data/gt/, index/
+     --run_reader (reader -> Document JSON per page)--> <run>/predictions/<dataset>/<key>.json
+     --score--> <run>/results.json (iris-results/1) + summary.md
+```
+
+| Module | Job | Contract |
+|---|---|---|
+| `normalize` | text normalisation `iris-norm/1` | pure functions |
+| `gt` | page ground truth `iris-gt/1` (eval/README.md) | `parse_gt(dict) -> PageGT` |
+| `docmodel` | read a reader's `Document` | `parse_document(dict) -> PredPage` |
+| `textmetrics`, `teds`, `kv`, `silent` | metrics | pure functions on `PageGT` / `PredPage` parts |
+| `splits`, `index`, `manifests` | split rule `iris-split/1`, frozen splits, page index, manifests | `prepare(dataset)`, `load_index(dataset)` |
+| `private` | `OCR_PRIVATE_DATA` slot | `load_private(split) -> [IndexEntry]` |
+| `datasets/*` | native GT -> `iris-gt/1`, one converter per dataset | `list_pages(raw)`, `convert(raw, id)` |
+| `readers/*` | candidate readers | `describe() -> dict`, `read(image) -> Document` |
+| `score`, `run_reader`, `prepare` | command-line entry points | see eval/README.md |
+
+Results never contain document text, only IDs and numbers. Held-out pages need an explicit
+`--heldout-scoring-run` flag.

@@ -1,0 +1,43 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "bln600",
+ "name": "BLN600 (British Library 19th-century newspapers)",
+ "homepage": "https://orda.shef.ac.uk/articles/dataset/BLN600_A_Parallel_Corpus_of_Machine_Human_Transcribed_Nineteenth_Century_Newspaper_Texts/25439023",
+ "source": "https://orda.shef.ac.uk/articles/dataset/BLN600_A_Parallel_Corpus_of_Machine_Human_Transcribed_Nineteenth_Century_Newspaper_Texts/25439023",
+ "description": "600 newspaper article images with human transcriptions.",
+ "licence": {
+  "name": "CC BY-NC-ND 4.0",
+  "url": "https://orda.shef.ac.uk/articles/dataset/BLN600_A_Parallel_Corpus_of_Machine_Human_Transcribed_Nineteenth_Century_Newspaper_Texts/25439023",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": false,
+ "redistribution": "unmodified only, non-commercial",
+ "use": "evaluation-only-needs-decision",
+ "use_reason": "Non-commercial, no-derivatives: may never ship (O4); evaluation use needs an owner decision.",
+ "language": "en",
+ "categories": [
+  "book-or-scanned-pages"
+ ],
+ "conditions": [
+  "old-print",
+  "faded"
+ ],
+ "ground_truth": {
+  "text": true,
+  "boxes": false,
+  "reading_order": true,
+  "tables": false,
+  "key_values": false
+ },
+ "size": "600 images",
+ "files": [],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded here: host not reachable from the sandbox (orda.shef.ac.uk (figshare))"
+}

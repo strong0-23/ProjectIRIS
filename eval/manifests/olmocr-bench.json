@@ -1,0 +1,46 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "olmocr-bench",
+ "name": "olmOCR-Bench",
+ "homepage": "https://huggingface.co/datasets/allenai/olmOCR-bench",
+ "source": "https://huggingface.co/datasets/allenai/olmOCR-bench",
+ "description": "1,403 PDFs (arXiv math, old scans, tables, headers/footers, multi-column, long tiny text) with 7,010 unit tests: text presence/absence, reading order between spans, table cell neighbours, formulas.",
+ "licence": {
+  "name": "ODC-BY-1.0",
+  "url": "https://huggingface.co/datasets/allenai/olmOCR-bench",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": true,
+ "redistribution": "yes, with attribution; not redistributed here",
+ "use": "allowed",
+ "language": "en",
+ "categories": [
+  "book-or-scanned-pages",
+  "letters-and-reports",
+  "tables"
+ ],
+ "conditions": [
+  "old-scan"
+ ],
+ "ground_truth": {
+  "text": "unit tests only",
+  "boxes": false,
+  "reading_order": "pairwise tests",
+  "tables": "cell-neighbour tests",
+  "key_values": false
+ },
+ "size": "1,403 PDFs, 7,010 tests",
+ "files": [],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded here: host not reachable from the sandbox (huggingface.co)",
+ "notes": [
+  "Ground truth is unit tests, not transcriptions: needs a test-pass metric added to the harness (follow-up), not CER."
+ ]
+}

@@ -1,0 +1,46 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "sroie",
+ "name": "SROIE (ICDAR 2019 Scanned Receipts OCR and Information Extraction)",
+ "homepage": "https://rrc.cvc.uab.es/?ch=13",
+ "source": "https://rrc.cvc.uab.es/?ch=13",
+ "description": "Scanned receipts with text lines, boxes and four fields (company, date, address, total).",
+ "licence": {
+  "name": "none stated",
+  "url": "https://rrc.cvc.uab.es/?ch=13",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": "unknown",
+ "redistribution": "unknown",
+ "use": "excluded",
+ "use_reason": "no licence stated (O4)",
+ "language": "en",
+ "categories": [
+  "receipts"
+ ],
+ "conditions": [
+  "scan",
+  "faded"
+ ],
+ "ground_truth": {
+  "text": true,
+  "boxes": true,
+  "reading_order": false,
+  "tables": false,
+  "key_values": true
+ },
+ "size": "973 receipts (626 train / 347 test)",
+ "files": [],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded here: host not reachable from the sandbox (rrc.cvc.uab.es)",
+ "notes": [
+  "Dropped by orchestrator decision (WO-001 review, 19 Nov 2026)."
+ ]
+}

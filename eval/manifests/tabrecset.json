@@ -1,0 +1,49 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "tabrecset",
+ "name": "TabRecSet (tables in the wild)",
+ "homepage": "https://github.com/MaxKinny/TabRecSet",
+ "source": "https://doi.org/10.6084/m9.figshare.20647788",
+ "description": "Photographed and scanned tables, many deformed or skewed, with table structure and cell content. English and Chinese.",
+ "licence": {
+  "name": "CC BY-SA 4.0",
+  "url": "https://github.com/MaxKinny/TabRecSet",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": true,
+ "redistribution": "yes, with attribution and share-alike for adaptations; not redistributed here",
+ "use": "allowed",
+ "language": "en/zh",
+ "categories": [
+  "tables",
+  "phone-photos-hard"
+ ],
+ "conditions": [
+  "phone-photo",
+  "deformed",
+  "skewed"
+ ],
+ "ground_truth": {
+  "text": true,
+  "boxes": true,
+  "reading_order": false,
+  "tables": true,
+  "key_values": false
+ },
+ "size": "38.1K tables (about 20K English); figshare archive",
+ "files": [],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded here: host not reachable from the sandbox (figshare.com)",
+ "notes": [
+  "ShareAlike: fine for evaluation (nothing shipped); confirm with the orchestrator before shipping anything derived.",
+  "Use the English subset only.",
+  "File URLs to be listed and pinned once figshare is reachable."
+ ]
+}

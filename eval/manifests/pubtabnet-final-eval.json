@@ -1,0 +1,80 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "pubtabnet-final-eval",
+ "name": "PubTabNet final evaluation set (ICDAR 2021 Scientific Literature Parsing, task B)",
+ "homepage": "https://github.com/ibm-aur-nlp/PubTabNet",
+ "source": "https://github.com/ajjimeno/icdar-task-b (linked from the PubTabNet README as the PubTabNet test set and ground truth)",
+ "description": "Table images cropped from scientific articles in the PubMed Central Open Access commercial-use subset, with HTML ground truth (structure and cell text). English.",
+ "licence": {
+  "name": "Annotations: CDLA-Permissive-1.0 (IBM). Images: PMC Open Access Subset terms (commercial-use collection; each article under its own CC0/CC BY/CC BY-SA/CC BY-ND licence).",
+  "url": "https://github.com/ibm-aur-nlp/PubTabNet/blob/master/LICENSE.md",
+  "images_terms_url": "https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/",
+  "read_at": "2026-11-19",
+  "note": "The icdar-task-b repository has no licence file of its own. Orchestrator decision (WO-001 review, 19 Nov 2026): covered by the PubTabNet licence (LICENSE.md above) because it is PubTabNet's own test set. Only page IDs are committed; no images or annotations."
+ },
+ "commercial_use": true,
+ "redistribution": "conditional: annotations yes (CDLA-Permissive-1.0); images only with each article's attribution. Not redistributed here: manifest and script only.",
+ "use": "allowed",
+ "language": "en",
+ "categories": [
+  "tables"
+ ],
+ "conditions": [],
+ "ground_truth": {
+  "text": true,
+  "boxes": false,
+  "reading_order": "row-major cell order",
+  "tables": true,
+  "key_values": false
+ },
+ "size": "9,064 table images (final_eval.zip, 203.6 MB) + final_eval.json (19.8 MB)",
+ "files": [
+  {
+   "url": "https://raw.githubusercontent.com/ajjimeno/icdar-task-b/86a9c80239ffc1d1534a4f63031c861949c982ea/final_eval.json",
+   "dest": "final_eval.json",
+   "bytes": 19845115,
+   "sha256": "ff562aa4392aa0f081bd05a98e68e3fff458d0b817486d1298fdeb23837ff609",
+   "unpack": null
+  },
+  {
+   "url": "https://media.githubusercontent.com/media/ajjimeno/icdar-task-b/86a9c80239ffc1d1534a4f63031c861949c982ea/final_eval.zip",
+   "dest": "final_eval.zip",
+   "bytes": 203608160,
+   "sha256": "4dbcd23c3a2a04a907f056379393d217f4c33ad21dfa6b14ab313a089fb1f20c",
+   "unpack": "zip"
+  }
+ ],
+ "converter": "pubtabnet_final_eval",
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 100,
+  "exclude": [
+   "8972e89bad9919ad83c32b48e7b9e9cd51e4789b2ccabb477e312941d5761c82.png",
+   "6c338e811af9402b98f215c9759761bc6c3def789a9ad83789f208d267d0006a.png",
+   "8be7af498b313fcdc872c170f32425cebc75098e7c2119ea1b47a88c691245eb.png",
+   "60f7079ba6d811dea21e96d519da45548135509ecd489525770ce40514ffb5a0.png",
+   "da8512c3da0b345d6c822eda63edeec3e5bd7bbf92e06c067178beb54447138f.png",
+   "c26a54401dc062f7ff2aff801c23eccf6a5c71206acd06bc029182e31ca1f01d.png",
+   "3df4c15b6e133af47b8de862f86279470a08b80f5332c42d7772054da865abf1.png",
+   "f8e5e3067d00554e8de86b5f0fc0fd401ea4aa43d2cafca8f83aeb2b3c94593a.png",
+   "903042a25ca43bbf9921d7abf1757d3c6c75af5fb987812cb41cdb01eb670685.png",
+   "70bf8d7bdd26521240c6df2c0310cd7ece22e69d598f725caf8d4247d3790079.png",
+   "18e1b93b8340cf2b853cddc614226757d23d6bdeeef0a3e94530be06efbe04b2.png",
+   "42597d9582fe42683d4bcea786ddf46f1cfbd60f5714f6206a665bd779c02c8f.png",
+   "834c2f9603f4bacecdf442d509f5486e5987a4f4604b79241771b8f8c29329cd.png",
+   "af753c587e401fa38d39ab7e2a29990dd85b9cee68ff289a1ee09396b7077482.png",
+   "1e3d063bd2a22f6d1f3e4a4518b4b8875d54e4ba9ea94bb9cd42726210c2712e.png",
+   "b8be3d5b9226ae98763531e3cc05f3d194628d6863e351cb90e0558a871369fa.png",
+   "3131f597fe5d7c6831f472a1fe5bf587cb8920fc9a4e5c1ef2246381a02416a0.png"
+  ],
+  "exclude_reason": "Ground truth of these 17 tables was shown to the coding agent while the source was being inspected, before the split was fixed (WO-001). Excluded from both splits so no held-out page has been read."
+ },
+ "download_status_here": "downloaded",
+ "notes": [
+  "Pages are table crops, not full pages: tables category only.",
+  "Training splits of PubTabNet are widely used to train table models; this is the final evaluation set, whose ground truth was released after the 2021 competition. Candidates may still have seen it: treat as possibly contaminated.",
+  "Pinned to commit 86a9c80239ffc1d1534a4f63031c861949c982ea; the zip sha256 is the Git LFS object id."
+ ]
+}

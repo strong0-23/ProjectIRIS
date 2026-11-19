@@ -1,0 +1,46 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "uvdoc",
+ "name": "UVDoc benchmark (document unwarping)",
+ "homepage": "https://igl.ethz.ch/projects/uvdoc/",
+ "source": "https://igl.ethz.ch/projects/uvdoc/UVDoc_benchmark.zip",
+ "description": "Photos of deformed (folded, crumpled) printed documents with flat references.",
+ "licence": {
+  "name": "none stated",
+  "url": "https://igl.ethz.ch/projects/uvdoc/",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": "unknown",
+ "redistribution": "unknown",
+ "use": "excluded",
+ "use_reason": "no licence stated (O4)",
+ "language": "en",
+ "categories": [
+  "phone-photos-hard"
+ ],
+ "conditions": [
+  "crumpled",
+  "folded"
+ ],
+ "ground_truth": {
+  "text": "unconfirmed",
+  "boxes": false,
+  "reading_order": false,
+  "tables": false,
+  "key_values": false
+ },
+ "size": "unknown",
+ "files": [],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded here: host not reachable from the sandbox (igl.ethz.ch)",
+ "notes": [
+  "Dropped by orchestrator decision (WO-001 review, 19 Nov 2026)."
+ ]
+}

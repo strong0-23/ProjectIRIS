@@ -1,0 +1,53 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "funsd",
+ "name": "FUNSD (Form Understanding in Noisy Scanned Documents)",
+ "homepage": "https://guillaumejaume.github.io/FUNSD",
+ "source": "https://guillaumejaume.github.io/FUNSD/download",
+ "description": "199 noisy scanned forms with word boxes, text, entity labels (question/answer/header) and links.",
+ "licence": {
+  "name": "FUNSD License and Terms of Use: non-commercial, research and educational purposes only",
+  "url": "https://guillaumejaume.github.io/FUNSD/work",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": false,
+ "redistribution": false,
+ "use": "evaluation-only-needs-decision",
+ "use_reason": "Non-commercial licence: may never ship (O4); evaluation use needs an owner decision.",
+ "language": "en",
+ "categories": [
+  "forms"
+ ],
+ "conditions": [
+  "noisy-scan"
+ ],
+ "ground_truth": {
+  "text": true,
+  "boxes": true,
+  "reading_order": false,
+  "tables": false,
+  "key_values": true
+ },
+ "size": "199 forms (149 train / 50 test)",
+ "files": [
+  {
+   "url": "https://guillaumejaume.github.io/FUNSD/dataset.zip",
+   "dest": "dataset.zip",
+   "bytes": null,
+   "sha256": null,
+   "unpack": "zip"
+  }
+ ],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded here: host not reachable from the sandbox (guillaumejaume.github.io)",
+ "notes": [
+  "The only English scanned-forms set with text and key-value ground truth found; 199 forms limit held-out to ~30 at 60/40 with sample 75."
+ ]
+}

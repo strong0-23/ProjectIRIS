@@ -1,0 +1,57 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "smartdoc2015-ch2",
+ "name": "SmartDoc 2015 Challenge 2 (smartphone document OCR)",
+ "homepage": "https://sites.google.com/site/icdar15smartdoc/challenge-2/description",
+ "source": "https://zenodo.org/record/2572929",
+ "description": "Smartphone photos of printed English documents taken under varying conditions (blur, perspective, lighting), with the ground-truth text of each document.",
+ "licence": {
+  "name": "CC BY 4.0",
+  "url": "https://zenodo.org/record/2572929",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": true,
+ "redistribution": "yes, with attribution; not redistributed here",
+ "use": "allowed",
+ "language": "en",
+ "categories": [
+  "phone-photos-hard"
+ ],
+ "conditions": [
+  "phone-photo",
+  "blur",
+  "perspective",
+  "uneven-light"
+ ],
+ "ground_truth": {
+  "text": true,
+  "boxes": false,
+  "reading_order": "document text order",
+  "tables": false,
+  "key_values": false
+ },
+ "size": "sampleDataset.zip 12.2 GB + testDataset.zip 26.6 GB",
+ "files": [
+  {
+   "url": "https://zenodo.org/records/2572929/files/testDataset.zip?download=1",
+   "dest": "testDataset.zip",
+   "bytes": null,
+   "md5": "9acba64807b19c9087406361cf6d056e",
+   "unpack": "zip"
+  }
+ ],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded here: host not reachable from the sandbox (zenodo.org)",
+ "notes": [
+  "The main public source of hard-condition phone photos with full text ground truth.",
+  "Several photos per source document: the converter must split by source document (all captures of one document in the same split) to keep held-out unseen.",
+  "Pinned by the md5 published on Zenodo; add sha256 after the first download."
+ ]
+}

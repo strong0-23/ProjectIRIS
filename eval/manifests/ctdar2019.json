@@ -1,0 +1,45 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "ctdar2019",
+ "name": "ICDAR 2019 cTDaR (table detection and recognition)",
+ "homepage": "https://github.com/cndplab-founder/ICDAR2019_cTDaR",
+ "source": "https://github.com/cndplab-founder/ICDAR2019_cTDaR",
+ "description": "Modern and archival document images with table regions and cell structure (cell coordinates, no cell text).",
+ "licence": {
+  "name": "none stated (no LICENSE file, no licence in README)",
+  "url": "https://github.com/cndplab-founder/ICDAR2019_cTDaR",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": "unknown",
+ "redistribution": "unknown",
+ "use": "excluded",
+ "use_reason": "no licence stated (O4)",
+ "language": "en/various",
+ "categories": [
+  "tables"
+ ],
+ "conditions": [
+  "archival-scan"
+ ],
+ "ground_truth": {
+  "text": false,
+  "boxes": true,
+  "reading_order": false,
+  "tables": "structure only",
+  "key_values": false
+ },
+ "size": "test: 439 track A, 250 track B2 pages",
+ "files": [],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded: licence not stated (the host, github.com, is reachable)",
+ "notes": [
+  "Dropped by orchestrator decision (WO-001 review, 19 Nov 2026)."
+ ]
+}

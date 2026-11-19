@@ -89,3 +89,43 @@ approves each milestone and every gated task, and receives a short review of eve
 A test agent and a design agent are planned.
 **Why.** Owner decision (19 Nov 2026): agents are simple executors; "we tell and it executes", and
 the owner and Claude review the work.
+
+## WO-001 decisions (coding agent, 19 Nov 2026; for orchestrator review)
+
+### E6: Evaluation set: manifests, licence gate and splits
+**Rule.**
+- Every dataset has a manifest in `eval/manifests/` with its licence (name, URL, date read) and a
+  `use` of `allowed`, `evaluation-only-needs-decision` (non-commercial or no-redistribution: never
+  shipped; scored only after an owner decision) or `excluded` (licence missing or unclear).
+  `eval/download.py` enforces it. Data lives in `eval/.data/` (git-ignored); only manifests,
+  scripts and frozen split ID lists are committed.
+- Split rule `iris-split/1`: per (dataset, category), rank page IDs by
+  `sha256("iris-wo001:<dataset>:<id>")`, keep the first `sample_per_category` (100 for PubTabNet,
+  75 elsewhere), first 60% dev, rest held-out. Frozen lists in `eval/splits/` are re-checked on
+  every `prepare`; changing one is an orchestrator decision.
+- A page whose content an agent has seen before its split was fixed is excluded from both splits
+  and listed in the manifest (17 PubTabNet tables in WO-001).
+- Datasets with several captures of one document (e.g. SmartDoc) are split by source document.
+- Datasets with no stated licence (SROIE, VRDU, cTDaR, UVDoc) are dropped: `use` is `excluded`,
+  reason "no licence stated (O4)" (orchestrator decision, WO-001 review, 19 Nov 2026).
+- The PubTabNet final-eval repository is covered by the PubTabNet licence because it is
+  PubTabNet's own test set; only page IDs are committed (same decision).
+**Why.** E2: reproducible, content-blind splits; O4: licences checked before any download.
+
+### E7: Metric definitions
+**Rule.**
+- Normalisation `iris-norm/1`: NFKC, typographic quotes/dashes/minus to ASCII, drop zero-width and
+  control characters, collapse whitespace. Case and punctuation are kept.
+- CER/WER are order-independent at line level (predicted lines re-sorted by where they best match
+  the ground truth, or the reader's own order when that costs less); micro-averaged per category.
+  Reading order is scored separately (CER in the reader's order and a pairwise order score).
+- Tables: TEDS and TEDS-struct (PubTabNet costs, no thead/tbody nodes, normalised text); missing or
+  extra tables score 0.
+- Silent errors: a wrong word, number, cell or key-value that is neither flagged nor below the
+  confidence threshold (default 0.5, or the reader's declared `confidenceThreshold`). Reported
+  separately from visible errors, with missed words (omissions), flag recall and false flags.
+- No combined error score (orchestrator decision, WO-001 review, 19 Nov 2026). Every acceptance
+  line names silent errors and visible errors separately, and silent errors are always reported
+  first. This is how E3's "silent errors weigh more" is applied.
+- Cost: seconds per page (mean, p50, p95), peak memory of the reader process, model download size.
+**Why.** Separates reading from ordering and visible from silent errors, as E2 and E3 require.

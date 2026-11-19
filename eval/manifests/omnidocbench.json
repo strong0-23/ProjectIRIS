@@ -1,0 +1,51 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "omnidocbench",
+ "name": "OmniDocBench",
+ "homepage": "https://github.com/opendatalab/OmniDocBench",
+ "source": "https://huggingface.co/datasets/opendatalab/OmniDocBench",
+ "description": "1,651 pages across academic papers, slides, books, textbooks, exam papers, notes, magazines, reports, newspapers and historical documents; text, reading order, tables (HTML/LaTeX), formulas; attributes such as fuzzy_scan and watermark.",
+ "licence": {
+  "name": "Research purposes only, not for commercial use (copyright statement on the dataset card)",
+  "url": "https://huggingface.co/datasets/opendatalab/OmniDocBench",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": false,
+ "redistribution": false,
+ "use": "evaluation-only-needs-decision",
+ "use_reason": "Research-only, non-commercial: may never ship (O4); evaluation use needs an owner decision.",
+ "language": "en/zh",
+ "categories": [
+  "book-or-scanned-pages",
+  "letters-and-reports",
+  "tables",
+  "screenshots"
+ ],
+ "conditions": [
+  "fuzzy-scan",
+  "watermark",
+  "colourful-background"
+ ],
+ "ground_truth": {
+  "text": true,
+  "boxes": true,
+  "reading_order": true,
+  "tables": true,
+  "key_values": false
+ },
+ "size": "1,651 pages, 1.55 GB",
+ "files": [],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded here: host not reachable from the sandbox (huggingface.co)",
+ "notes": [
+  "Best match for books, slides (screenshot-like) and reading order, but non-commercial.",
+  "Use English pages only."
+ ]
+}

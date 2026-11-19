@@ -1,0 +1,9 @@
+# Runtime (licences checked for O4): rapidfuzz MIT, apted MIT, Pillow MIT-CMU
+rapidfuzz==3.14.6
+apted==1.0.3
+Pillow==12.3.0
+# Development: pytest MIT, ruff MIT, mypy MIT
+pytest==9.1.1
+ruff==0.17.5
+mypy==2.3.1
+# External program for the baseline: Tesseract OCR 5.x (Apache-2.0) with eng.traineddata

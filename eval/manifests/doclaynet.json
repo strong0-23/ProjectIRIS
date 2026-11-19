@@ -1,0 +1,60 @@
+{
+ "schema": "iris-manifest/1",
+ "id": "doclaynet",
+ "name": "DocLayNet",
+ "homepage": "https://github.com/DS4SD/DocLayNet",
+ "source": "https://codait-cos-dax.s3.us.cloud-object-storage.appdomain.cloud/dax-doclaynet/1.0.0/",
+ "description": "Born-digital pages from financial reports, scientific articles, laws and regulations, government tenders, manuals and patents, with layout boxes; the 'extra' archive carries the PDF text cells.",
+ "licence": {
+  "name": "CDLA-Permissive-1.0",
+  "url": "https://huggingface.co/datasets/ds4sd/DocLayNet-v1.1/blob/main/README.md",
+  "read_at": "2026-11-19"
+ },
+ "commercial_use": true,
+ "redistribution": "yes (CDLA-Permissive-1.0); not redistributed here",
+ "use": "allowed",
+ "language": "en (mostly)",
+ "categories": [
+  "letters-and-reports"
+ ],
+ "conditions": [
+  "born-digital"
+ ],
+ "ground_truth": {
+  "text": "PDF text cells (extra archive)",
+  "boxes": true,
+  "reading_order": false,
+  "tables": "boxes only, no structure",
+  "key_values": false
+ },
+ "size": "80,863 pages (69,375 train / 6,489 val / 4,999 test); core 28 GiB, extra 7.5 GiB; use the test split",
+ "files": [
+  {
+   "url": "https://codait-cos-dax.s3.us.cloud-object-storage.appdomain.cloud/dax-doclaynet/1.0.0/DocLayNet_core.zip",
+   "dest": "DocLayNet_core.zip",
+   "bytes": null,
+   "sha256": null,
+   "unpack": "zip"
+  },
+  {
+   "url": "https://codait-cos-dax.s3.us.cloud-object-storage.appdomain.cloud/dax-doclaynet/1.0.0/DocLayNet_extra.zip",
+   "dest": "DocLayNet_extra.zip",
+   "bytes": null,
+   "sha256": null,
+   "unpack": "zip"
+  }
+ ],
+ "converter": null,
+ "split": {
+  "rule": "iris-split/1",
+  "seed": "iris-wo001",
+  "dev_fraction": 0.6,
+  "sample_per_category": 75,
+  "exclude": []
+ },
+ "download_status_here": "not downloaded here: host not reachable from the sandbox (codait-cos-dax.s3.us.cloud-object-storage.appdomain.cloud)",
+ "notes": [
+  "Checksums not yet pinned: first download needs --allow-unpinned, then pin.",
+  "No letters; born-digital only (no scans)."
+ ]
+}

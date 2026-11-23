@@ -41,3 +41,17 @@ def para(*lines: list[dict[str, Any]] | str, order: int | None = None,
     if flags:
         b["flags"] = flags
     return b
+
+
+import pytest  # noqa: E402
+
+
+@pytest.fixture(autouse=True)
+def _fast_local_http(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Data-pack tests talk to a local fake server: no retry delays, never through a proxy."""
+    from iris_eval.pack import remote
+
+    monkeypatch.setattr(remote, "RETRY_DELAY", 0.0)
+    monkeypatch.setattr(remote, "RETRIES", 2)
+    for var in ("no_proxy", "NO_PROXY"):
+        monkeypatch.setenv(var, "127.0.0.1,localhost")

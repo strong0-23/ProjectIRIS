@@ -1,7 +1,9 @@
-# Runtime (licences checked for O4): rapidfuzz MIT, apted MIT, Pillow MIT-CMU
+# Runtime (licences checked for O4): rapidfuzz MIT, apted MIT, Pillow MIT-CMU, pyarrow Apache-2.0
 rapidfuzz==3.14.6
 apted==1.0.3
 Pillow==12.3.0
+# pyarrow: only the CORD v2 converter (parquet shards); research-only, never part of the engine
+pyarrow==26.0.1
 # Development: pytest MIT, ruff MIT, mypy MIT
 pytest==9.1.1
 ruff==0.17.5

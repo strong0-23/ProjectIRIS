@@ -12,8 +12,8 @@
  },
  "commercial_use": false,
  "redistribution": "unmodified only, non-commercial",
- "use": "evaluation-only-needs-decision",
- "use_reason": "Non-commercial, no-derivatives: may never ship (O4); evaluation use needs an owner decision.",
+ "use": "evaluation-only",
+ "use_reason": "Non-commercial, no-derivatives: may never ship (O4). Approved for evaluation only (owner, O4 amendment, 23 Nov 2026): never trained on, never redistributed, nothing committed except IDs and numbers, results reported separately from O4-clear data, dropped if IRIS becomes commercial.",
  "language": "en",
  "categories": [
   "book-or-scanned-pages"
@@ -31,7 +31,7 @@
  },
  "size": "600 images",
  "files": [],
- "converter": null,
+ "converter": "bln600",
  "split": {
   "rule": "iris-split/1",
   "seed": "iris-wo001",
@@ -39,5 +39,29 @@
   "sample_per_category": 75,
   "exclude": []
  },
- "download_status_here": "not downloaded here: host not reachable from the sandbox (orda.shef.ac.uk (figshare))"
+ "download_status_here": "not downloaded here: host not reachable from the sandbox (orda.shef.ac.uk (figshare))",
+ "pack": {
+  "planner": "bln600",
+  "sources": [
+   {
+    "name": "archive",
+    "kind": "figshare-zip",
+    "article": 25439023,
+    "file_regex": "(?i)\\.zip$",
+    "whole_max_bytes": 2000000000,
+    "password_env": "IRIS_BLN600_PASSWORD",
+    "password_required": true
+   }
+  ],
+  "page_addressing": "page ID = GALE document ID; members Images/<id>.jpg|.tif and 'Ground Truth'/<id>.txt",
+  "estimate": {
+   "bytes": 150000000,
+   "how": "range reads: 75 article images (size per image unknown, ~2 MB assumed for mixed JPG/TIFF) + transcriptions; archive name and size resolved from the figshare API on first run"
+  }
+ },
+ "notes": [
+  "Unmodified redistribution only (ND): converted ground truth stays on the owner's machine and in the dev export only.",
+  "The publishers protect the archive with a password given on the dataset page, so that users read the licence first. It is not stored in this repository: whoever runs fetch_pack reads the licence on the dataset page and supplies the password at run time (--archive-password bln600=<password> or the IRIS_BLN600_PASSWORD environment variable). Without it, BLN600 is skipped.",
+  "Python can open ZipCrypto but not AES archives: the run stops and says so if the archive uses AES."
+ ]
 }

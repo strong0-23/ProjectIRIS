@@ -64,3 +64,28 @@ def test_committed_frozen_splits_are_consistent() -> None:
             assert not excluded & (set(s["dev"]) | set(s["heldout"]))
             n = len(s["dev"]) + len(s["heldout"])
             assert len(s["dev"]) == round(n * rec["dev_fraction"])
+
+
+def test_frozen_record_format_unchanged_for_pubtabnet() -> None:
+    import json
+
+    from iris_eval.manifests import load_manifest
+    from iris_eval.paths import SPLITS_DIR
+
+    frozen = json.loads((SPLITS_DIR / "pubtabnet-final-eval.json").read_text())
+    s = frozen["categories"]["tables"]
+    rec = frozen_record(load_manifest("pubtabnet-final-eval"), {"tables": {"dev": s["dev"], "heldout": s["heldout"]}})
+    assert rec == frozen  # the WO-003 refactor writes exactly the WO-001 record
+
+
+def test_grouped_split_keeps_groups_on_one_side() -> None:
+    from iris_eval.splits import split_grouped
+
+    groups = {f"t{t}_i{i}": f"t{t}" for t in range(50) for i in range(200)}
+    s = split_grouped(groups, seed="iris-wo001", dataset="fatura", dev_fraction=0.6, sample=75)
+    assert len(s["dev"]) == 45 and len(s["heldout"]) == 30
+    assert not {groups[i] for i in s["dev"]} & {groups[i] for i in s["heldout"]}
+    assert s == split_grouped(dict(reversed(list(groups.items()))), seed="iris-wo001", dataset="fatura",
+                              dev_fraction=0.6, sample=75)
+    with pytest.raises(ValueError):
+        split_grouped({"a": "g", "b": "g"}, seed="s", dataset="d", dev_fraction=0.6, sample=None)

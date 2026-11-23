@@ -3,7 +3,7 @@
  "id": "funsd",
  "name": "FUNSD (Form Understanding in Noisy Scanned Documents)",
  "homepage": "https://guillaumejaume.github.io/FUNSD",
- "source": "https://guillaumejaume.github.io/FUNSD/download",
+ "source": "https://github.com/GuillaumeJaume/FUNSD (the dataset.zip served by the project website)",
  "description": "199 noisy scanned forms with word boxes, text, entity labels (question/answer/header) and links.",
  "licence": {
   "name": "FUNSD License and Terms of Use: non-commercial, research and educational purposes only",
@@ -12,8 +12,8 @@
  },
  "commercial_use": false,
  "redistribution": false,
- "use": "evaluation-only-needs-decision",
- "use_reason": "Non-commercial licence: may never ship (O4); evaluation use needs an owner decision.",
+ "use": "evaluation-only",
+ "use_reason": "Non-commercial licence: may never ship (O4). Approved for evaluation only (owner, O4 amendment, 23 Nov 2026): never trained on, never redistributed, nothing committed except IDs and numbers, results reported separately from O4-clear data, dropped if IRIS becomes commercial.",
  "language": "en",
  "categories": [
   "forms"
@@ -31,14 +31,14 @@
  "size": "199 forms (149 train / 50 test)",
  "files": [
   {
-   "url": "https://guillaumejaume.github.io/FUNSD/dataset.zip",
+   "url": "https://raw.githubusercontent.com/GuillaumeJaume/FUNSD/8905aca92b3181853307e2880e3d6f71dee8e9f3/dataset.zip",
    "dest": "dataset.zip",
-   "bytes": null,
+   "bytes": 16838830,
    "sha256": null,
    "unpack": "zip"
   }
  ],
- "converter": null,
+ "converter": "funsd",
  "split": {
   "rule": "iris-split/1",
   "seed": "iris-wo001",
@@ -46,8 +46,27 @@
   "sample_per_category": 75,
   "exclude": []
  },
- "download_status_here": "not downloaded here: host not reachable from the sandbox (guillaumejaume.github.io)",
+ "download_status_here": "not downloaded here (not needed: synthetic tests)",
  "notes": [
-  "The only English scanned-forms set with text and key-value ground truth found; 199 forms limit held-out to ~30 at 60/40 with sample 75."
- ]
+  "The only English scanned-forms set with text and key-value ground truth found; 199 forms limit held-out to ~30 at 60/40 with sample 75.",
+  "Pinned to commit 8905aca92b3181853307e2880e3d6f71dee8e9f3 of the FUNSD repository; sha256 recorded in the lock on first download."
+ ],
+ "pack": {
+  "planner": "funsd",
+  "sources": [
+   {
+    "name": "archive",
+    "kind": "zip",
+    "access": "whole",
+    "url": "https://raw.githubusercontent.com/GuillaumeJaume/FUNSD/8905aca92b3181853307e2880e3d6f71dee8e9f3/dataset.zip",
+    "dest": "dataset.zip",
+    "bytes": 16838830
+   }
+  ],
+  "page_addressing": "page ID = form image stem; members dataset/{training,testing}_data/images/<id>.png and .../annotations/<id>.json",
+  "estimate": {
+   "bytes": 16838830,
+   "how": "the whole archive (16.8 MB, size read from GitHub at commit 8905aca)"
+  }
+ }
 }

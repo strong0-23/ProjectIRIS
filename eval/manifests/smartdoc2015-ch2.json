@@ -30,28 +30,49 @@
   "tables": false,
   "key_values": false
  },
- "size": "sampleDataset.zip 12.2 GB + testDataset.zip 26.6 GB",
+ "size": "testDataset.zip 26.6 GB: 35 documents, 8,470 images (sampleDataset.zip 12.2 GB not used)",
  "files": [
   {
-   "url": "https://zenodo.org/records/2572929/files/testDataset.zip?download=1",
+   "url": "https://zenodo.org/api/records/2572929/files/testDataset.zip/content",
    "dest": "testDataset.zip",
    "bytes": null,
    "md5": "9acba64807b19c9087406361cf6d056e",
    "unpack": "zip"
   }
  ],
- "converter": null,
+ "converter": "smartdoc2015",
  "split": {
-  "rule": "iris-split/1",
+  "rule": "iris-split/1-grouped",
   "seed": "iris-wo001",
   "dev_fraction": 0.6,
   "sample_per_category": 75,
-  "exclude": []
+  "exclude": [],
+  "group_by": "source document (identical ground-truth text file: CRC-32 and size from the zip directory)"
  },
  "download_status_here": "not downloaded here: host not reachable from the sandbox (zenodo.org)",
  "notes": [
   "The main public source of hard-condition phone photos with full text ground truth.",
   "Several photos per source document: the converter must split by source document (all captures of one document in the same split) to keep held-out unseen.",
-  "Pinned by the md5 published on Zenodo; add sha256 after the first download."
- ]
+  "Split by source document (iris-split/1-grouped): the run stops if grouping does not give the 35 test documents.",
+  "Folder and file naming inside testDataset.zip are not documented publicly; the planner pairs images and text files by stem and fails loudly otherwise."
+ ],
+ "pack": {
+  "planner": "smartdoc",
+  "sources": [
+   {
+    "name": "archive",
+    "kind": "zip",
+    "access": "range",
+    "url": "https://zenodo.org/api/records/2572929/files/testDataset.zip/content",
+    "md5": "9acba64807b19c9087406361cf6d056e",
+    "whole_max_bytes": null
+   }
+  ],
+  "expected_groups": 35,
+  "page_addressing": "page ID = image file stem; ground truth = the .txt member with the same stem (one UTF-8 text file per image)",
+  "estimate": {
+   "bytes": 240000000,
+   "how": "range reads: central directory (~17k entries, ~2 MB) + 75 phone photos (~3.1 MB each: 26.6 GB / 8,470); the whole archive is never downloaded"
+  }
+ }
 }

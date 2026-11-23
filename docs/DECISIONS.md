@@ -129,3 +129,89 @@ the owner and Claude review the work.
   first. This is how E3's "silent errors weigh more" is applied.
 - Cost: seconds per page (mean, p50, p95), peak memory of the reader process, model download size.
 **Why.** Separates reading from ordering and visible from silent errors, as E2 and E3 require.
+
+## Owner decisions on evaluation data (23 Nov 2026)
+
+### O4 amendment: evaluation-only datasets
+**Rule.** FUNSD, OmniDocBench and BLN600 are approved for evaluation only: never trained on, never
+redistributed, nothing from them committed except IDs and numbers, results reported separately
+from O4-clear data, and dropped if IRIS becomes commercial. Their manifests carry
+`use: evaluation-only`; the tools need `--accept-eval-only`. Datasets with a non-commercial
+licence and no such decision stay `evaluation-only-needs-decision` and are not fetched.
+**Why.** They are the only sources found for forms, slide-like screenshots and book pages with
+full text ground truth (WO-001, decision 2).
+
+### O6: Data access
+**Rule.** Evaluation data is downloaded on the owner's PC. The development split is copied to the
+sandbox for agent work; held-out pages stay on the PC and are scored there by the runner, never
+opened by an agent.
+**Why.** The sandbox cannot reach Hugging Face, Zenodo, figshare or IBM COS; the owner's PC can.
+
+### O7: Owner photos
+**Rule.** The owner's own photos live in one private folder on his PC that he keeps adding to
+(`OCR_PRIVATE_DATA`). Photos already seen by agents during SplitLah are development only. Every
+new photo is assigned to development or held-out by a fixed rule the first time the harness sees
+it, and the assignment is frozen in a private file inside that folder (never in the repo).
+Nothing from these photos is ever committed.
+**Why.** A growing, guaranteed-unseen held-out set of real hard-condition photos, without the
+owner choosing which photo lands where.
+
+## WO-003 decisions (coding agent, 23 Nov 2026; for orchestrator review)
+
+### E8: Data packs: sample-only download with locks
+**Rule.**
+- `eval/fetch_pack.py` (standard library only) downloads only the files of the pages the split
+  rule selects. It lists pages from archive directories or index files (never page content),
+  reads archive members with HTTP range requests where the host allows it, and fetches whole
+  files only where there is no other way (parquet shards; archives under 20 MB; a fallback for
+  hosts that ignore range requests, capped per source and by `--max-whole-gb`, default 2).
+- Each dataset's manifest has a `pack` (planner, sources, estimate) or a `pack_reason`.
+- Archive passwords that publishers use to gate a dataset behind its licence page (BLN600) are
+  never stored in the repository: the person running the fetch supplies them at run time
+  (orchestrator, WO-003 review); without one the dataset is skipped with a pointer to the page.
+- The first run writes `eval/locks/<dataset>.lock.json` (size and sha256 of every file written,
+  size/ETag or figshare id of every remote source) and the frozen split; later runs verify both.
+  New files after a completed run need `--update-lock`; a changed remote source is refused.
+- Converters of packed datasets read the page list from `raw/<dataset>/pack.json`, so `prepare`
+  recomputes exactly the split the fetch used.
+- `eval/export_dev.py` writes the dev split as one zip (data-directory layout, relative paths);
+  it stops if any page is outside the frozen dev list. Held-out pages are never exported.
+**Why.** O6 and the owner's request for one command under 10 GB: about 1.3 GB instead of more than
+100 GB of whole archives.
+
+### E9: Grouped split `iris-split/1-grouped`
+**Rule.** Datasets with several pages per source are split by group, so no group has pages in
+both dev and held-out: FATURA by template (held-out measures unseen layouts), SmartDoc 2015 by
+source document (E6). Groups are ranked by `sha256("<seed>:<dataset>:group:<group>")`; the first
+60% are dev groups; pages are then drawn by page hash from each side (45 dev / 30 held-out).
+SmartDoc's documents are recognised by identical ground-truth files (CRC-32 and size from the zip
+directory, no file opened); the fetch stops unless that gives the 35 documents of the test set.
+`iris-split/1` and the frozen PubTabNet split are unchanged.
+**Why.** E2: held-out must be unseen; captures of one document, or renders of one template, in
+both splits would leak.
+
+### E10: Private split rule `iris-private/1`
+**Rule.** Applies O7. A photo on the seen list is dev; any other photo is dev when
+`int(sha256("iris-private/1:<sha256 of the photo bytes>")[:8], 16) < 0.6 * 2^32`, else held-out.
+Assignments are frozen in `OCR_PRIVATE_DATA/.iris-split.json`, matched by path and by content
+hash (a renamed photo keeps its split). The only change ever made to a frozen assignment is
+held-out -> dev when a held-out photo later appears on the seen list. The private folder layout
+becomes `<category>/<photo>` (the WO-001 `dev/` and `heldout/` folders are refused with a
+message). SplitLah owner references are converted to key-value ground truth (eval/README.md).
+**Why.** Order-independent, cannot be steered by looking at a photo, and never reshuffles photos
+already assigned.
+
+### E11: Evaluation-only results are reported apart
+**Rule.** `score` aggregates pages of `evaluation-only` datasets under their own category labels
+(`<category> [evaluation-only]`, `ALL [evaluation-only]`), never mixed with O4-clear data.
+**Why.** O4 amendment.
+
+### E12: pyarrow for CORD v2 (research only)
+**Rule.** The CORD v2 converter reads its parquet shards with pyarrow 26.0.1 (Apache-2.0, a
+55 MB wheel), imported only by that converter; the engine never uses it and `fetch_pack.py` does
+not need it. Proposed as gated (WORKFLOW: material dependency); see the settlement below.
+**Why.** CORD v2 is published only as parquet; reading parquet with the standard library is not
+practical. The alternative is dropping CORD (the only O4-clear receipts set).
+**Settled** (orchestrator, WO-003 review, 23 Nov 2026): pyarrow 26.0.1 approved. It is
+research-only, imported only by the CORD converter, Apache-2.0, and not a runtime, framework or
+model under the WORKFLOW gate. E8-E11 and the private slot layout change accepted.

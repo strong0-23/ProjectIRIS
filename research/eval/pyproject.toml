@@ -4,11 +4,13 @@ version = "0.1.0"
 description = "Project IRIS evaluation harness: scoring, splits and baseline readers (research only)"
 license = "Apache-2.0"
 requires-python = ">=3.11"
-# Licences checked for O4: rapidfuzz MIT, apted MIT, Pillow MIT-CMU.
+# Licences checked for O4: rapidfuzz MIT, apted MIT, Pillow MIT-CMU, pyarrow Apache-2.0.
+# pyarrow is used only by the CORD v2 converter (parquet); eval/fetch_pack.py needs no packages.
 dependencies = [
     "rapidfuzz==3.14.6",
     "apted==1.0.3",
     "Pillow==12.3.0",
+    "pyarrow==26.0.1",
 ]
 
 [project.optional-dependencies]
@@ -32,7 +34,10 @@ known-first-party = ["iris_eval", "conftest"]
 [tool.mypy]
 strict = true
 packages = ["iris_eval"]
+# eval/fetch_pack.py and eval/export_dev.py add research/eval to sys.path at run time; this lets
+# mypy find iris_eval when it checks them from any directory with this config file.
+mypy_path = "$MYPY_CONFIG_FILE_DIR"
 
 [[tool.mypy.overrides]]
-module = ["apted", "apted.*"]
+module = ["apted", "apted.*", "pyarrow", "pyarrow.*"]
 ignore_missing_imports = true

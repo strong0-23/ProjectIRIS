@@ -26,6 +26,8 @@ from typing import Any
 
 GT_SCHEMA = "iris-gt/1"
 SPLITS = ("dev", "heldout")
+CATEGORIES = ("receipts", "invoices", "forms", "letters-and-reports", "tables", "book-or-scanned-pages",
+              "screenshots", "phone-photos-hard")
 
 
 @dataclass(frozen=True)

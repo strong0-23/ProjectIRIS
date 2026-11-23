@@ -29,8 +29,58 @@
   "tables": "cell-neighbour tests",
   "key_values": false
  },
- "size": "1,403 PDFs, 7,010 tests",
- "files": [],
+ "size": "1,403 PDFs, 7,010 tests; repository 357 MB (commit 54a96a6)",
+ "files": [
+  {
+   "url": "https://huggingface.co/datasets/allenai/olmOCR-bench/resolve/54a96a6fb6a2bd3b297e59869491db4d3625b711/bench_data/arxiv_math.jsonl",
+   "dest": "arxiv_math.jsonl",
+   "bytes": null,
+   "sha256": null,
+   "unpack": null
+  },
+  {
+   "url": "https://huggingface.co/datasets/allenai/olmOCR-bench/resolve/54a96a6fb6a2bd3b297e59869491db4d3625b711/bench_data/headers_footers.jsonl",
+   "dest": "headers_footers.jsonl",
+   "bytes": null,
+   "sha256": null,
+   "unpack": null
+  },
+  {
+   "url": "https://huggingface.co/datasets/allenai/olmOCR-bench/resolve/54a96a6fb6a2bd3b297e59869491db4d3625b711/bench_data/long_tiny_text.jsonl",
+   "dest": "long_tiny_text.jsonl",
+   "bytes": null,
+   "sha256": null,
+   "unpack": null
+  },
+  {
+   "url": "https://huggingface.co/datasets/allenai/olmOCR-bench/resolve/54a96a6fb6a2bd3b297e59869491db4d3625b711/bench_data/multi_column.jsonl",
+   "dest": "multi_column.jsonl",
+   "bytes": null,
+   "sha256": null,
+   "unpack": null
+  },
+  {
+   "url": "https://huggingface.co/datasets/allenai/olmOCR-bench/resolve/54a96a6fb6a2bd3b297e59869491db4d3625b711/bench_data/old_scans.jsonl",
+   "dest": "old_scans.jsonl",
+   "bytes": null,
+   "sha256": null,
+   "unpack": null
+  },
+  {
+   "url": "https://huggingface.co/datasets/allenai/olmOCR-bench/resolve/54a96a6fb6a2bd3b297e59869491db4d3625b711/bench_data/old_scans_math.jsonl",
+   "dest": "old_scans_math.jsonl",
+   "bytes": null,
+   "sha256": null,
+   "unpack": null
+  },
+  {
+   "url": "https://huggingface.co/datasets/allenai/olmOCR-bench/resolve/54a96a6fb6a2bd3b297e59869491db4d3625b711/bench_data/table_tests.jsonl",
+   "dest": "table_tests.jsonl",
+   "bytes": null,
+   "sha256": null,
+   "unpack": null
+  }
+ ],
  "converter": null,
  "split": {
   "rule": "iris-split/1",
@@ -41,6 +91,10 @@
  },
  "download_status_here": "not downloaded here: host not reachable from the sandbox (huggingface.co)",
  "notes": [
-  "Ground truth is unit tests, not transcriptions: needs a test-pass metric added to the harness (follow-up), not CER."
- ]
+  "Ground truth is unit tests, not transcriptions: needs a test-pass metric added to the harness (follow-up), not CER.",
+  "Pinned to commit 54a96a6fb6a2bd3b297e59869491db4d3625b711; test file sizes and checksums to be recorded when a pack is added."
+ ],
+ "pack": null,
+ "pack_reason": "no converter yet: ground truth is unit tests (presence, absence, order, table neighbours, math), which iris-gt/1 cannot express, and pages are single-page PDFs that need a rasteriser dependency. Needs a test-pass metric first (follow-up task).",
+ "page_addressing": "each test line names its PDF ('pdf': '<subset>/<name>.pdf', 'page'); PDFs live at https://huggingface.co/datasets/allenai/olmOCR-bench/resolve/54a96a6fb6a2bd3b297e59869491db4d3625b711/bench_data/pdfs/<subset>/<name>.pdf, so a pack can fetch one PDF per selected page"
 }

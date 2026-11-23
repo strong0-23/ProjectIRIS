@@ -27,9 +27,24 @@
   "tables": false,
   "key_values": true
  },
- "size": "1,000 receipts public (800 train / 100 validation / 100 test); use the test and validation splits",
- "files": [],
- "converter": null,
+ "size": "1,000 receipts (800 train / 100 validation / 100 test); the pack uses test + validation (200), shards 234 MB + 242 MB",
+ "files": [
+  {
+   "url": "https://huggingface.co/datasets/naver-clova-ix/cord-v2/resolve/7f0115a4b758a71d6473b8d085751692da2fef98/data/test-00000-of-00001-9c204eb3f4e11791.parquet",
+   "dest": "test-00000-of-00001.parquet",
+   "bytes": null,
+   "sha256": "51c65f1788faff392abe2a0b55b023eb23e9be551c509138eaa3a832514224e7",
+   "unpack": null
+  },
+  {
+   "url": "https://huggingface.co/datasets/naver-clova-ix/cord-v2/resolve/7f0115a4b758a71d6473b8d085751692da2fef98/data/validation-00000-of-00001-cc3c5779fe22e8ca.parquet",
+   "dest": "validation-00000-of-00001.parquet",
+   "bytes": null,
+   "sha256": "0d0f6dac11fdcc549de2746aa9f53136a3bc22a2a1aff2b0b847f7622ad60c15",
+   "unpack": null
+  }
+ ],
+ "converter": "cord_v2",
  "split": {
   "rule": "iris-split/1",
   "seed": "iris-wo001",
@@ -39,8 +54,37 @@
  },
  "download_status_here": "not downloaded here: host not reachable from the sandbox (huggingface.co)",
  "notes": [
-  "Files (parquet) to be listed and pinned on a machine that reaches huggingface.co; then write the converter.",
   "Not English-only (O1 is English first): useful for numbers and layout, report separately from English receipts.",
-  "Phone photos, some skewed or crumpled, but conditions are not labelled; count only pages the owner tags as hard."
- ]
+  "Phone photos, some skewed or crumpled, but conditions are not labelled; count only pages the owner tags as hard.",
+  "Pinned to commit 7f0115a4b758a71d6473b8d085751692da2fef98; sha256 from the Hugging Face LFS pointers (read 23 Nov 2026). Sizes are recorded in the lock on first download.",
+  "The converter needs pyarrow (Apache-2.0) to read parquet."
+ ],
+ "pack": {
+  "planner": "cord",
+  "sources": [
+   {
+    "name": "test",
+    "kind": "file",
+    "url": "https://huggingface.co/datasets/naver-clova-ix/cord-v2/resolve/7f0115a4b758a71d6473b8d085751692da2fef98/data/test-00000-of-00001-9c204eb3f4e11791.parquet",
+    "dest": "test-00000-of-00001.parquet",
+    "sha256": "51c65f1788faff392abe2a0b55b023eb23e9be551c509138eaa3a832514224e7"
+   },
+   {
+    "name": "validation",
+    "kind": "file",
+    "url": "https://huggingface.co/datasets/naver-clova-ix/cord-v2/resolve/7f0115a4b758a71d6473b8d085751692da2fef98/data/validation-00000-of-00001-cc3c5779fe22e8ca.parquet",
+    "dest": "validation-00000-of-00001.parquet",
+    "sha256": "0d0f6dac11fdcc549de2746aa9f53136a3bc22a2a1aff2b0b847f7622ad60c15"
+   }
+  ],
+  "rows": {
+   "test": 100,
+   "validation": 100
+  },
+  "page_addressing": "page ID = <shard>/<row index, 3 digits>; columns image (struct with bytes) and ground_truth (JSON string)",
+  "estimate": {
+   "bytes": 476000000,
+   "how": "two parquet shards whole (234 MB + 242 MB as listed on Hugging Face); parquet rows cannot be read with the standard library, so no range reads"
+  }
+ }
 }

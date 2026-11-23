@@ -26,6 +26,7 @@ from .docmodel import Cost, PredPage, parse_document
 from .gt import PageGT, load_gt, parse_gt
 from .index import IndexEntry, load_index
 from .kv import score_pairs
+from .manifests import EVAL_ONLY_USES, list_manifests
 from .normalize import NORMALISATION_VERSION
 from .private import load_private, read_private_gt
 from .silent import cell_silent_errors, word_silent_errors
@@ -163,12 +164,28 @@ def aggregate(pages: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def aggregate_all(pages: list[dict[str, Any]]) -> dict[str, Any]:
+EVAL_ONLY_TAG = " [evaluation-only]"
+
+
+def eval_only_datasets() -> set[str]:
+    """Datasets whose licence allows evaluation only (O4 amendment): reported apart from O4-clear data."""
+    try:
+        return {m["id"] for m in list_manifests() if m["use"] in EVAL_ONLY_USES}
+    except (OSError, ValueError):
+        return set()
+
+
+def aggregate_all(pages: list[dict[str, Any]], eval_only: set[str] | None = None) -> dict[str, Any]:
+    """Per (split, category), per (split, category, dataset) and per split. Pages of
+    evaluation-only datasets are aggregated separately (category label + EVAL_ONLY_TAG), never mixed
+    with O4-clear data."""
+    eval_only = eval_only_datasets() if eval_only is None else eval_only
     groups: dict[str, list[dict[str, Any]]] = {}
     for p in pages:
-        groups.setdefault(f"{p['split']}|{p['category']}", []).append(p)
-        groups.setdefault(f"{p['split']}|{p['category']}|{p['dataset']}", []).append(p)
-        groups.setdefault(f"{p['split']}|ALL", []).append(p)
+        tag = EVAL_ONLY_TAG if p["dataset"] in eval_only else ""
+        groups.setdefault(f"{p['split']}|{p['category']}{tag}", []).append(p)
+        groups.setdefault(f"{p['split']}|{p['category']}{tag}|{p['dataset']}", []).append(p)
+        groups.setdefault(f"{p['split']}|ALL{tag}", []).append(p)
     return {k: aggregate(v) for k, v in sorted(groups.items())}
 
 
@@ -218,8 +235,9 @@ def summary_markdown(run: dict[str, Any], aggregates: dict[str, Any]) -> str:
     for key, agg in aggregates.items():
         parts = key.split("|")
         split, cat = parts[0], parts[1]
-        ds = parts[2] if len(parts) > 2 else ("all" if cat != "ALL" else "")
-        row = [split, "**all**" if cat == "ALL" else cat, ds] + [f(agg) for _, f in COLUMNS]
+        ds = parts[2] if len(parts) > 2 else ("all" if not cat.startswith("ALL") else "")
+        cat_label = "**all**" if cat == "ALL" else f"**all**{EVAL_ONLY_TAG}" if cat == f"ALL{EVAL_ONLY_TAG}" else cat
+        row = [split, cat_label, ds] + [f(agg) for _, f in COLUMNS]
         out.append("| " + " | ".join(row) + " |")
     out.append("")
     return "\n".join(out)

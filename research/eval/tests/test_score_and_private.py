@@ -13,21 +13,23 @@ SECRET = "Zyxwvut Secretname"
 
 
 def _write_private(root: Path) -> None:
-    for split in ("dev", "heldout"):
-        d = root / split / "receipts"
-        d.mkdir(parents=True)
-        Image.new("RGB", (20, 20), "white").save(d / "r1.png")
-        (d / "r1.gt.json").write_text(json.dumps({
-            "text": {"lines": [SECRET, "Total 12.50"], "reading_order": True},
-            "pairs": [{"key": "Total", "field": "total", "value": "12.50"}],
-            "tables": None,
-        }))
+    d = root / "receipts"
+    d.mkdir(parents=True)
+    Image.new("RGB", (20, 20), "white").save(d / "r1.png")
+    (d / "r1.gt.json").write_text(json.dumps({
+        "text": {"lines": [SECRET, "Total 12.50"], "reading_order": True},
+        "pairs": [{"key": "Total", "field": "total", "value": "12.50"}],
+        "tables": None,
+    }))
 
 
 def test_private_slot_scores_by_id_only(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     root = tmp_path / "private"
     _write_private(root)
+    seen = tmp_path / "seen.txt"
+    seen.write_text("receipts/r1.png\n")  # seen photos are always dev (O7)
     monkeypatch.setenv("OCR_PRIVATE_DATA", str(root))
+    monkeypatch.setenv("OCR_PRIVATE_SEEN", str(seen))
     entries = load_private("dev")
     assert [e.id for e in entries] == ["private/receipts/r1"]
     preds = tmp_path / "preds" / "private"
@@ -50,11 +52,11 @@ def test_private_slot_scores_by_id_only(tmp_path: Path, monkeypatch: pytest.Monk
     assert page["silent"]["words"]["silent_numbers"] == 1
 
 
-def test_private_page_without_image_is_an_error(tmp_path: Path) -> None:
+def test_old_private_layout_is_an_error(tmp_path: Path) -> None:
     d = tmp_path / "dev" / "forms"
     d.mkdir(parents=True)
     (d / "f1.gt.json").write_text("{}")
-    with pytest.raises(PrivateDataError):
+    with pytest.raises(PrivateDataError, match="old dev/ and heldout/ layout"):
         load_private("dev", tmp_path)
 
 

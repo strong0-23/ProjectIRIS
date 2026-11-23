@@ -34,17 +34,17 @@
    "dest": "DocLayNet_core.zip",
    "bytes": null,
    "sha256": null,
-   "unpack": "zip"
+   "unpack": null
   },
   {
    "url": "https://codait-cos-dax.s3.us.cloud-object-storage.appdomain.cloud/dax-doclaynet/1.0.0/DocLayNet_extra.zip",
    "dest": "DocLayNet_extra.zip",
    "bytes": null,
    "sha256": null,
-   "unpack": "zip"
+   "unpack": null
   }
  ],
- "converter": null,
+ "converter": "doclaynet",
  "split": {
   "rule": "iris-split/1",
   "seed": "iris-wo001",
@@ -54,7 +54,32 @@
  },
  "download_status_here": "not downloaded here: host not reachable from the sandbox (codait-cos-dax.s3.us.cloud-object-storage.appdomain.cloud)",
  "notes": [
-  "Checksums not yet pinned: first download needs --allow-unpinned, then pin.",
-  "No letters; born-digital only (no scans)."
- ]
+  "No letters; born-digital only (no scans).",
+  "Range reads verify each member's CRC-32; the lock records each fetched file's sha256 and the archives' sizes and ETags.",
+  "Text ground truth is the PDF text layer (cells); pages whose PDF has no text layer get no text ground truth."
+ ],
+ "pack": {
+  "planner": "doclaynet",
+  "sources": [
+   {
+    "name": "core",
+    "kind": "zip",
+    "access": "range",
+    "url": "https://codait-cos-dax.s3.us.cloud-object-storage.appdomain.cloud/dax-doclaynet/1.0.0/DocLayNet_core.zip",
+    "whole_max_bytes": null
+   },
+   {
+    "name": "extra",
+    "kind": "zip",
+    "access": "range",
+    "url": "https://codait-cos-dax.s3.us.cloud-object-storage.appdomain.cloud/dax-doclaynet/1.0.0/DocLayNet_extra.zip",
+    "whole_max_bytes": null
+   }
+  ],
+  "page_addressing": "page ID = page hash; core zip: COCO/test.json (test pages, precedence 0) and PNG/<hash>.png; extra zip: JSON/<hash>.json (PDF text cells)",
+  "estimate": {
+   "bytes": 70000000,
+   "how": "range reads: two central directories (~30 MB for 80,863 + 161,726 entries), COCO/test.json, and 75 PNGs (~0.37 MB each) + 75 cell JSONs. Whole archives (35.5 GiB) are never downloaded."
+  }
+ }
 }

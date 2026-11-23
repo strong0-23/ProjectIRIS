@@ -16,8 +16,10 @@ from typing import Any
 from .datasets import get_converter
 from .gt import GT_SCHEMA, parse_gt
 from .manifests import load_manifest
-from .paths import SPLITS_DIR, gt_dir, index_path, raw_dir, safe_key
-from .splits import SPLIT_RULE, list_digest, split_ids
+from .paths import SPLITS_DIR, data_dir, gt_dir, index_path, raw_dir, safe_key
+from .splits import SplitMismatch, check_frozen, compute_splits, frozen_record
+
+__all__ = ["IndexEntry", "SplitMismatch", "check_frozen", "compute_splits", "frozen_record", "load_index", "prepare"]
 
 
 @dataclass(frozen=True)
@@ -32,71 +34,6 @@ class IndexEntry:
     private: bool = False
 
 
-class SplitMismatch(RuntimeError):
-    pass
-
-
-def compute_splits(manifest: dict[str, Any], pages: list[tuple[str, str]]) -> dict[str, dict[str, list[str]]]:
-    sp = manifest["split"]
-    if sp["rule"] != SPLIT_RULE:
-        raise ValueError(f"unknown split rule {sp['rule']!r}")
-    by_cat: dict[str, list[str]] = {}
-    for nid, cat in pages:
-        by_cat.setdefault(cat, []).append(nid)
-    return {
-        cat: split_ids(
-            ids,
-            seed=sp["seed"],
-            dataset=manifest["id"],
-            dev_fraction=float(sp["dev_fraction"]),
-            sample=sp["sample_per_category"],
-            exclude=sp["exclude"],
-        )
-        for cat, ids in sorted(by_cat.items())
-    }
-
-
-def frozen_record(manifest: dict[str, Any], splits: dict[str, dict[str, list[str]]]) -> dict[str, Any]:
-    sp = manifest["split"]
-    return {
-        "dataset": manifest["id"],
-        "rule": sp["rule"],
-        "seed": sp["seed"],
-        "dev_fraction": sp["dev_fraction"],
-        "sample_per_category": sp["sample_per_category"],
-        "excluded_ids": len(sp["exclude"]),
-        "categories": {
-            cat: {
-                "dev": s["dev"],
-                "heldout": s["heldout"],
-                "dev_sha256": list_digest(s["dev"]),
-                "heldout_sha256": list_digest(s["heldout"]),
-            }
-            for cat, s in splits.items()
-        },
-    }
-
-
-def check_frozen(record: dict[str, Any], splits_dir: Path, write: bool) -> str:
-    path = splits_dir / f"{record['dataset']}.json"
-    if path.is_file():
-        with path.open(encoding="utf-8") as f:
-            frozen = json.load(f)
-        if frozen != record:
-            raise SplitMismatch(
-                f"{path} differs from the split recomputed from the manifest and data; "
-                "the data or the manifest changed. Do not overwrite without an orchestrator decision."
-            )
-        return "matches frozen split"
-    if not write:
-        raise SplitMismatch(f"no frozen split {path}; run prepare with --write-splits once")
-    splits_dir.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as f:
-        json.dump(record, f, indent=1)
-        f.write("\n")
-    return "frozen split written"
-
-
 def prepare(dataset: str, write_splits: bool = False, splits_dir: Path = SPLITS_DIR) -> dict[str, Any]:
     manifest = load_manifest(dataset)
     if manifest["use"] == "excluded":
@@ -104,7 +41,9 @@ def prepare(dataset: str, write_splits: bool = False, splits_dir: Path = SPLITS_
     conv = get_converter(manifest.get("converter"))
     raw = raw_dir(dataset)
     pages = conv.list_pages(raw)
-    splits = compute_splits(manifest, pages)
+    page_groups = getattr(conv, "page_groups", None)
+    groups = page_groups(raw) if callable(page_groups) else None
+    splits = compute_splits(manifest, pages, groups)
     status = check_frozen(frozen_record(manifest, splits), splits_dir, write_splits)
 
     out_entries: list[dict[str, Any]] = []
@@ -133,6 +72,12 @@ def prepare(dataset: str, write_splits: bool = False, splits_dir: Path = SPLITS_
     return {"dataset": dataset, "available_pages": len(pages), "split_status": status, "counts": counts}
 
 
+def _resolve(p: str) -> Path:
+    """Index paths may be relative to the data directory (a dev export, eval/export_dev.py)."""
+    path = Path(p)
+    return path if path.is_absolute() else data_dir() / path
+
+
 def load_index(dataset: str) -> list[IndexEntry]:
     p = index_path(dataset)
     if not p.is_file():
@@ -142,5 +87,5 @@ def load_index(dataset: str) -> list[IndexEntry]:
         for line in f:
             e = json.loads(line)
             out.append(IndexEntry(e["id"], e["key"], e["dataset"], e["category"], e["split"],
-                                  Path(e["gt"]), e["image"]))
+                                  _resolve(e["gt"]), str(_resolve(e["image"]))))
     return out

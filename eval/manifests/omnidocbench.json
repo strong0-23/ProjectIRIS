@@ -12,13 +12,12 @@
  },
  "commercial_use": false,
  "redistribution": false,
- "use": "evaluation-only-needs-decision",
- "use_reason": "Research-only, non-commercial: may never ship (O4); evaluation use needs an owner decision.",
+ "use": "evaluation-only",
+ "use_reason": "Research-only, non-commercial: may never ship (O4). Approved for evaluation only (owner, O4 amendment, 23 Nov 2026): never trained on, never redistributed, nothing committed except IDs and numbers, results reported separately from O4-clear data, dropped if IRIS becomes commercial.",
  "language": "en/zh",
  "categories": [
   "book-or-scanned-pages",
   "letters-and-reports",
-  "tables",
   "screenshots"
  ],
  "conditions": [
@@ -33,9 +32,17 @@
   "tables": true,
   "key_values": false
  },
- "size": "1,651 pages, 1.55 GB",
- "files": [],
- "converter": null,
+ "size": "1,651 pages (v1.6), 1.55 GB repository; OmniDocBench.json 42.2 MB",
+ "files": [
+  {
+   "url": "https://huggingface.co/datasets/opendatalab/OmniDocBench/resolve/aa1ee96d106dbe53d0ae59474d75c6e6d9b53fec/OmniDocBench.json",
+   "dest": "OmniDocBench.json",
+   "bytes": null,
+   "sha256": "a45cd84b04ad8b793e775089640e6b681209abea33ead54c1828ddca35fae496",
+   "unpack": null
+  }
+ ],
+ "converter": "omnidocbench",
  "split": {
   "rule": "iris-split/1",
   "seed": "iris-wo001",
@@ -46,6 +53,44 @@
  "download_status_here": "not downloaded here: host not reachable from the sandbox (huggingface.co)",
  "notes": [
   "Best match for books, slides (screenshot-like) and reading order, but non-commercial.",
-  "Use English pages only."
- ]
+  "English pages only (page_attribute.language == english). Category map in pack.category_map; 'note' pages (handwritten notes) are left out (O1: print only).",
+  "Pinned to commit aa1ee96d106dbe53d0ae59474d75c6e6d9b53fec; OmniDocBench.json sha256 from the Hugging Face LFS pointer (read 23 Nov 2026).",
+  "Tables are scored wherever a page has them (TEDS), so there is no separate tables category for this dataset."
+ ],
+ "pack": {
+  "planner": "omnidocbench",
+  "sources": [
+   {
+    "name": "gt",
+    "kind": "file",
+    "url": "https://huggingface.co/datasets/opendatalab/OmniDocBench/resolve/aa1ee96d106dbe53d0ae59474d75c6e6d9b53fec/OmniDocBench.json",
+    "dest": "OmniDocBench.json",
+    "sha256": "a45cd84b04ad8b793e775089640e6b681209abea33ead54c1828ddca35fae496"
+   },
+   {
+    "name": "images",
+    "kind": "url-files",
+    "base_url": "https://huggingface.co/datasets/opendatalab/OmniDocBench/resolve/aa1ee96d106dbe53d0ae59474d75c6e6d9b53fec/images"
+   }
+  ],
+  "languages": [
+   "english"
+  ],
+  "category_map": {
+   "book": "book-or-scanned-pages",
+   "colorful_textbook": "book-or-scanned-pages",
+   "historical_document": "book-or-scanned-pages",
+   "newspaper": "book-or-scanned-pages",
+   "exam_paper": "book-or-scanned-pages",
+   "academic_literature": "letters-and-reports",
+   "research_report": "letters-and-reports",
+   "magazine": "letters-and-reports",
+   "PPT2PDF": "screenshots"
+  },
+  "page_addressing": "page ID = page_info.image_path in OmniDocBench.json; image = images/<image_path> fetched one file at a time",
+  "estimate": {
+   "bytes": 235000000,
+   "how": "OmniDocBench.json (42.2 MB) + up to 225 page images (~0.85 MB each)"
+  }
+ }
 }

@@ -11,7 +11,8 @@ and ``bytes`` pinned in its manifest; archives are unpacked to ``raw/<dataset>/u
 with path-traversal protection.
 
 Licence gate (docs/DECISIONS.md O4): ``excluded`` datasets are refused;
-``evaluation-only-needs-decision`` ones need ``--accept-eval-only`` (an owner decision).
+``evaluation-only`` ones need ``--accept-eval-only`` (owner decision, O4 amendment).
+For a sample-only download of just the pages the splits need, use ``eval/fetch_pack.py``.
 Files with no pinned checksum need ``--allow-unpinned``, which prints the sha256 to pin.
 
 Standard library only, so it runs before anything is installed.
@@ -132,7 +133,7 @@ def download(m: dict[str, Any], root: Path, accept_eval_only: bool, allow_unpinn
     ds = m["id"]
     if m["use"] == "excluded":
         raise DownloadError(f"{ds} is excluded ({m.get('use_reason', 'licence')}); not downloading")
-    if m["use"] == "evaluation-only-needs-decision" and not accept_eval_only:
+    if m["use"] in ("evaluation-only", "evaluation-only-needs-decision") and not accept_eval_only:
         raise DownloadError(f"{ds}: evaluation-only licence; needs an owner decision and --accept-eval-only")
     if not m["files"]:
         raise DownloadError(f"{ds}: manifest lists no files yet")

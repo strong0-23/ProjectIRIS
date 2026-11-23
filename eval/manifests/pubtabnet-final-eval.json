@@ -76,5 +76,33 @@
   "Pages are table crops, not full pages: tables category only.",
   "Training splits of PubTabNet are widely used to train table models; this is the final evaluation set, whose ground truth was released after the 2021 competition. Candidates may still have seen it: treat as possibly contaminated.",
   "Pinned to commit 86a9c80239ffc1d1534a4f63031c861949c982ea; the zip sha256 is the Git LFS object id."
- ]
+ ],
+ "pack": {
+  "planner": "pubtabnet",
+  "sources": [
+   {
+    "name": "gt",
+    "kind": "file",
+    "url": "https://raw.githubusercontent.com/ajjimeno/icdar-task-b/86a9c80239ffc1d1534a4f63031c861949c982ea/final_eval.json",
+    "dest": "final_eval.json",
+    "bytes": 19845115,
+    "sha256": "ff562aa4392aa0f081bd05a98e68e3fff458d0b817486d1298fdeb23837ff609"
+   },
+   {
+    "name": "images",
+    "kind": "zip",
+    "access": "range",
+    "url": "https://media.githubusercontent.com/media/ajjimeno/icdar-task-b/86a9c80239ffc1d1534a4f63031c861949c982ea/final_eval.zip",
+    "dest": "final_eval.zip",
+    "bytes": 203608160,
+    "sha256": "4dbcd23c3a2a04a907f056379393d217f4c33ad21dfa6b14ab313a089fb1f20c",
+    "whole_max_bytes": 210000000
+   }
+  ],
+  "page_addressing": "page ID = image file name; the key in final_eval.json and a member at the root of final_eval.zip",
+  "estimate": {
+   "bytes": 23000000,
+   "how": "final_eval.json whole (19.8 MB, pinned sha256) + range reads from final_eval.zip: its directory (~1.1 MB for 9,064 entries, measured from the sandbox) and the 100 split images (~20 KB each); falls back to the whole zip (203.6 MB, pinned sha256) if range requests fail"
+  }
+ }
 }

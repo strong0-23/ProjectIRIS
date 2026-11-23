@@ -15,8 +15,7 @@
  "use": "allowed",
  "language": "en/zh",
  "categories": [
-  "tables",
-  "phone-photos-hard"
+  "tables"
  ],
  "conditions": [
   "phone-photo",
@@ -32,7 +31,7 @@
  },
  "size": "38.1K tables (about 20K English); figshare archive",
  "files": [],
- "converter": null,
+ "converter": "tabrecset",
  "split": {
   "rule": "iris-split/1",
   "seed": "iris-wo001",
@@ -44,6 +43,25 @@
  "notes": [
   "ShareAlike: fine for evaluation (nothing shipped); confirm with the orchestrator before shipping anything derived.",
   "Use the English subset only.",
-  "File URLs to be listed and pinned once figshare is reachable."
- ]
+  "phone-photos-hard: not assigned from TabRecSet, because the annotations carry no capture-condition label; all pages count as tables.",
+  "The figshare file list could not be read from the sandbox (shell and web fetch both refused). fetch_pack resolves it from the figshare API and stops with the file list if the name pattern does not match exactly one archive.",
+  "Generated border-incomplete copies share file names with their originals, so only originals are used (no copy of a held-out table can be in dev)."
+ ],
+ "pack": {
+  "planner": "tabrecset",
+  "sources": [
+   {
+    "name": "archive",
+    "kind": "figshare-zip",
+    "article": 20647788,
+    "file_regex": "(?i)^(?!.*tableme)(?!.*pubtabnet).*tabrecset.*\\.zip$",
+    "whole_max_bytes": null
+   }
+  ],
+  "page_addressing": "page ID = image file stem of an English original (not a generated three-line/no-line copy); annotation = TSR_TCR_annotation JSON with the same stem (labelme shapes, label '<row>-<col>-<rowspan>-<colspan>-<text>', group_id = table)",
+  "estimate": {
+   "bytes": 60000000,
+   "how": "range reads: central directory (~15 MB, estimated) + 75 images and annotations; file name and size resolved from the figshare API on first run (figshare could not be read from the sandbox)"
+  }
+ }
 }

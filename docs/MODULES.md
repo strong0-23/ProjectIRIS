@@ -81,8 +81,11 @@ must not repeat text another block already holds.
 Research-only Python package `iris_eval`; never imported by the engine.
 
 ```
-eval/manifests/*.json --download.py--> eval/.data/raw/<dataset>/
+eval/manifests/*.json --fetch_pack.py (pack planner + split rule; locks in eval/locks/)--> eval/.data/raw/<dataset>/
+                                                                    (only the split's files + pack.json)
+     (download.py: whole files, WO-001)
      --prepare (converter + split rule, checked against eval/splits/)--> eval/.data/gt/, index/
+     --export_dev.py (dev only)--> eval/.data/exports/iris-dev-<date>.zip --import--> another data dir
      --run_reader (reader -> Document JSON per page)--> <run>/predictions/<dataset>/<key>.json
      --score--> <run>/results.json (iris-results/1) + summary.md
 ```
@@ -93,11 +96,20 @@ eval/manifests/*.json --download.py--> eval/.data/raw/<dataset>/
 | `gt` | page ground truth `iris-gt/1` (eval/README.md) | `parse_gt(dict) -> PageGT` |
 | `docmodel` | read a reader's `Document` | `parse_document(dict) -> PredPage` |
 | `textmetrics`, `teds`, `kv`, `silent` | metrics | pure functions on `PageGT` / `PredPage` parts |
-| `splits`, `index`, `manifests` | split rule `iris-split/1`, frozen splits, page index, manifests | `prepare(dataset)`, `load_index(dataset)` |
-| `private` | `OCR_PRIVATE_DATA` slot | `load_private(split) -> [IndexEntry]` |
-| `datasets/*` | native GT -> `iris-gt/1`, one converter per dataset | `list_pages(raw)`, `convert(raw, id)` |
+| `splits`, `index`, `manifests` | split rules `iris-split/1` and `iris-split/1-grouped`, frozen splits, page index (paths may be relative to the data dir), manifests (incl. `pack`) | `compute_splits(manifest, pages, groups)`, `prepare(dataset)`, `load_index(dataset)` |
+| `pack/*` | data packs, **standard library only**: safe paths, HTTP + range-read `RemoteFile`, locks, sources, per-dataset planners, the fetch run | `fetch_dataset(manifest, ...) -> Result`; planner `(Context) -> [Page]` |
+| `private` | `OCR_PRIVATE_DATA` slot (O7): `<category>/<photo>`, rule `iris-private/1`, frozen `.iris-split.json`, seen list, SplitLah converter | `load_private(split, root?, seen?) -> [IndexEntry]`, `sync_assignments(root, seen)`, `splitlah_to_gt(ref)` |
+| `export` | dev-split export and import | `plan_export(datasets, ...) -> Plan`, `write_export(plan, out)`, `import_export(zip, data_root)` |
+| `datasets/*` | native GT -> `iris-gt/1`, one converter per dataset; packed datasets list pages from `pack.json` (`_pack.PackConverter`) | `list_pages(raw)`, `convert(raw, id)`, optional `page_groups(raw)` |
 | `readers/*` | candidate readers | `describe() -> dict`, `read(image) -> Document` |
 | `score`, `run_reader`, `prepare` | command-line entry points | see eval/README.md |
 
 Results never contain document text, only IDs and numbers. Held-out pages need an explicit
-`--heldout-scoring-run` flag.
+`--heldout-scoring-run` flag. Pages of evaluation-only datasets are aggregated under
+`<category> [evaluation-only]` (DECISIONS E11).
+
+Data owned per location (WO-003): `eval/manifests`, `eval/splits`, `eval/locks` (committed, IDs and
+hashes only); `eval/.data/raw/<dataset>/pack.json`, fetched files, `gt/`, `index/`, `exports/`
+(owner's PC, git-ignored); `OCR_PRIVATE_DATA/.iris-split.json` (private folder only).
+Contract change: the private slot layout moved from `dev|heldout/<category>/` to `<category>/`
+with a rule-based frozen split (O7); `load_private(split)` keeps its signature.
